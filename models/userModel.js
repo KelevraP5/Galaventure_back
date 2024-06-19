@@ -22,13 +22,27 @@ exports.userRegister = async (userData) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const query = `INSERT INTO user (email, pseudo, password, created_at) VALUES (?, ?, ?, NOW())`;
     return new Promise((resolve, reject) => {
-        sqlConnection.query(query, [email, pseudo, hashedPassword], (err, result) => {
-            if (err) {
-                return reject(err);
+        const checkEmailAndPseudoQuery = 'SELECT * FROM user WHERE email = ? OR pseudo = ?';
+        
+        sqlConnection.query(checkEmailAndPseudoQuery, [email, pseudo], (err, result) => {
+            if (err) return reject(err);
+
+            if (result.length > 0) {
+                const existingUser = result[0];
+                if (existingUser.email === email) {
+                    return reject(new Error('Email already exists'));
+                }
+                if (existingUser.pseudo === pseudo) {
+                    return reject(new Error('Pseudo already exists'));
+                }
             }
-            resolve({id: result.insertId, email, pseudo});
+
+            const insertUserQuery = `INSERT INTO user (email, pseudo, password, created_at) VALUES (?, ?, ?, NOW())`;
+            sqlConnection.query(insertUserQuery, [email, pseudo, hashedPassword], (err, result) => {
+                if (err) return reject(err);
+                resolve({ id: result.insertId, pseudo, email });
+            });
         });
     });
 };
@@ -38,7 +52,6 @@ exports.userLogin = async ({emailOrPseudo, password}) => {
     let isEmailOrPseudo = '';
 
     return new Promise((resolve, reject) => {
-
         if (emailCheck.test(emailOrPseudo)) {
             isEmailOrPseudo = 'email';
         } else {
@@ -59,7 +72,7 @@ exports.userLogin = async ({emailOrPseudo, password}) => {
             const user = result[0];
             const isMatch = await bcrypt.compare(password, user.password);
 
-            if (isMatch){
+            if (!isMatch){
                 return reject(new Error('Invalid credentials'));
             }
 
@@ -71,6 +84,7 @@ exports.userLogin = async ({emailOrPseudo, password}) => {
 
 exports.getUserById = (id) => {
     const query = `SELECT id, email, pseudo FROM user WHERE id = ?`;
+
     return new Promise((resolve, reject) => {
         sqlConnection.query(query, [id], (err, result) => {
             if (err){
@@ -86,5 +100,22 @@ exports.getUserById = (id) => {
     })
 };
 
+exports.getAllUsers = () => {
+    const query = `SELECT * FROM user`;
+
+    return new Promise((resolve, reject) => {
+        sqlConnection.query(query, (err, result) => {
+            if (err){
+                return reject(err);
+            }
+
+            if (result.length === 0){
+                return resolve(null);
+            }
+
+            resolve(result);
+        })
+    });
+};
 
 

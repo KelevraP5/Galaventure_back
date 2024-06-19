@@ -10,14 +10,20 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 const userRoutes = require('./routes/userRoute');
+const { APIToolkit } = require('apitoolkit-express');
+
+const apitoolkitClient = APIToolkit.NewClient({apiKey : process.env.API_TOOLKIT_API_KEY});
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use(apitoolkitClient.expressMiddleware);
 
 mongoConnect();
 mysqlConnect();
 
 app.use('/api/user', userRoutes);
+app.use(apitoolkitClient.errorHandler);
 
 app.listen(port, () => {
     console.log('Server started on port', port);
