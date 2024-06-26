@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 const userRoutes = require('./routes/userRoute');
+const sheetRoutes = require('./routes/characterSheetRoute');
 const { APIToolkit } = require('apitoolkit-express');
 
 const apitoolkitClient = APIToolkit.NewClient({apiKey : process.env.API_TOOLKIT_API_KEY});
@@ -23,6 +24,7 @@ mongoConnect();
 mysqlConnect();
 
 app.use('/api/user', userRoutes);
+app.use('/api/joueur', sheetRoutes);
 app.use(apitoolkitClient.errorHandler);
 
 app.listen(port, () => {

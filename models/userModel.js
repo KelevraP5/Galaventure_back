@@ -5,7 +5,7 @@ const {
     emailCheck,
     passwordCheck,
     pseudoCheck
-} = require('../utils/validations/validations');
+} = require('../utils/validations');
 
 exports.userRegister = async (userData) => {
     const { email, pseudo, password } = userData;
