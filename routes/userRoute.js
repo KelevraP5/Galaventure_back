@@ -6,7 +6,6 @@ const authenticateJWT = require("../middlewares/jwt");
 
 router.post('/register', userController.userRegister);
 router.post('/login', userController.userLogin);
-// logout en front avec le $_SESSION
 router.get('/profile', authenticateJWT, userController.getUserProfile);
 router.get('/allUsers', authenticateJWT, userController.getAllUsers);
 

@@ -70,7 +70,7 @@ exports.userLogin = async ({emailOrPseudo, password}) => {
                 return reject(new Error('Invalid credentials'));
             }
 
-            const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+            const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '5h'});
             resolve({id: user.id, token});
         });
     });
