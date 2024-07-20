@@ -59,13 +59,10 @@ exports.updateUserProfile = async (req, res) => {
     const newData = req.body; // Les nouvelles données à mettre à jour
 
     try {
-        // Mettre à jour le modified_at en NOW()
         newData.modified_at = new Date();
 
-        // Effectuer la mise à jour dans la base de données
         const updatedUser = await userModel.updateUserById(userId, newData);
 
-        // Vérifier si l'utilisateur a été mis à jour avec succès
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }

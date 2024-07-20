@@ -38,3 +38,21 @@ exports.getOneSheet = (id) => {
         });
     });
 };
+
+exports.deleteCharacterSheetById = async (id) => {
+    const queryDelete = `DELETE FROM fiche_personnage WHERE id=?`;
+
+    return new Promise((resolve, reject) => {
+        sqlConnection.query(queryDelete, [id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+
+            if (result.affectedRows === 0) {
+                return resolve(null);
+            }
+
+            resolve({ message: 'Fiche de personnage supprimé avec succès' });
+        });
+    });
+};

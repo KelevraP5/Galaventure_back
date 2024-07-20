@@ -166,7 +166,6 @@ exports.updateUserById = async (id, newData) => {
 };
 
 exports.deleteUserById = async (id) => {
-    // Supprimer l'utilisateur de la base de données
     const queryDelete = `DELETE FROM user WHERE id=?`;
 
     return new Promise((resolve, reject) => {

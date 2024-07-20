@@ -15,7 +15,7 @@ const CharacterEvolution = mongoose.model('CharacterEvolution', evoCharacterSche
 const postSheet = async (id, newData) => {
     try {
         newData.modified_at = new Date();
-        newData.id_fiche_personnage = id; // Assurez-vous que l'ID est défini dans les nouvelles données
+        newData.id_fiche_personnage = id;
 
         const updatedSheet = await CharacterEvolution.findOneAndUpdate(
             { id_fiche_personnage: id },

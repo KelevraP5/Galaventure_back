@@ -25,4 +25,19 @@ exports.getOneSheet = async (req, res) => {
     }
 };
 
+exports.deleteCharacterSheet = async (req, res) => {
+    const sheetId = req.params.id;
 
+    try{
+        const charaSheet = await sheetModel.deleteCharacterSheetById(sheetId);
+
+        if (!charaSheet){
+            return res.status(404).json({message: 'Fiche introuvable'});
+        }
+
+        res.status(200).json(charaSheet);
+
+    } catch (err) {
+        return res.status(500).json({message : err.message});
+    }
+}
