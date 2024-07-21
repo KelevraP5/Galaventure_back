@@ -5,8 +5,8 @@ exports.userRegister = async (req, res) => {
         const user = await userModel.userRegister(req.body);
         res.status(201).json(user);
     } catch (err) {
-        if (err.message === 'Email already exists') {
-            return res.status(400).json({ message: 'Email already exists' });
+        if (err.message === 'Cet email existe déjà') {
+            return res.status(400).json({ message: 'Cet email existe déjà' });
         }
         res.status(400).json({ message: err.message });
     }
@@ -56,7 +56,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
     const userId = req.user.id;
-    const newData = req.body; // Les nouvelles données à mettre à jour
+    const newData = req.body;
 
     try {
         newData.modified_at = new Date();

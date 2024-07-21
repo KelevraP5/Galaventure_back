@@ -13,7 +13,7 @@ exports.pseudoCheck = (pseudo) => {
     if (pseudo.length < 3){
         throw new Error('Le pseudo doit faire au moins 3 caractères');
     } else if (pseudo.length > 15) {
-        throw new Error('Le pseudo doit faire moins de 15 caractères')
+        throw new Error('Le pseudo doit faire moins de 15 caractères');
     }
 
     if (onlyDigitsCheck.test(pseudo)) {
